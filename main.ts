@@ -1,9 +1,11 @@
 import {MarkdownView, Plugin} from 'obsidian';
 import GeminiMDSettingTab from './src/gemini-md-plugin-setting-tab';
 import GeminiMDPluginSettings from './src/gemini-md-plugin-settings.interface';
+import GeminiMDPluginSuggestionModal from './src/gemini-md-plugin-suggestion.modal';
 
 const DEFAULT_SETTINGS: GeminiMDPluginSettings = {
   apiKey: 'your-api-key',
+  prompts: [],
 };
 
 export default class GeminiMDPlugin extends Plugin {
@@ -13,8 +15,8 @@ export default class GeminiMDPlugin extends Plugin {
     await this.loadSettings();
 
     this.addCommand({
-      id: 'open-sample-modal-complex',
-      name: 'Open sample modal (complex)',
+      id: 'gemini-md:ask',
+      name: 'Ask Gemini',
       checkCallback: (checking: boolean) => {
         // Conditions to check
         const markdownView =
@@ -23,7 +25,16 @@ export default class GeminiMDPlugin extends Plugin {
           // If checking is true, we're simply "checking" if the command can be run.
           // If checking is false, then we want to actually perform the operation.
           if (!checking) {
-            console.log('complex command');
+            // const editor = markdownView.editor;
+            // const cursor = editor.getCursor();
+            // const selection = editor.getSelection();
+
+            // console.log('selection', selection);
+            // editor.replaceRange(`**${selection}**\n`, {
+            //   line: cursor.line + 1,
+            //   ch: 0,
+            // });
+            new GeminiMDPluginSuggestionModal(this).open();
           }
 
           // This command will only show up in Command Palette when the check function returns true
